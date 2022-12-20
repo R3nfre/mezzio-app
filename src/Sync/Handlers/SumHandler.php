@@ -15,7 +15,7 @@ class SumHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return new JsonResponse([
-            'answer' => $_GET['num1'] + $_GET['num2']
+            'answer' => $request->getQueryParams()['num1'] + $request->getQueryParams()['num2']
         ]);
     }
 }
