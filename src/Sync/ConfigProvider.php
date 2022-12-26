@@ -34,6 +34,7 @@ class ConfigProvider
             ],
             'factories'  => [
                 \Sync\Handlers\SumHandler::class => \Sync\Factories\SumHandlerFactory::class,
+                \Sync\Handlers\AuthorizeHandler::class => \Sync\Factories\AuthorizeHandlerFactory::class,
             ],
         ];
     }
