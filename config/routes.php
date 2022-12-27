@@ -39,5 +39,7 @@ use Psr\Container\ContainerInterface;
 
 return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
     $app->get('/sum', Sync\Handlers\SumHandler::class, 'sum');
-    $app->get('/authorize', Sync\Handlers\AuthorizeHandler::class, 'authorize');
+   // $app->get('/authorize', Sync\Handlers\AuthorizeHandler::class, 'authorize');
+    $app->get('/forwarding', Sync\Handlers\ForwardingHandler::class, 'forwarding');
+    $app->route('/authorize', Sync\Handlers\AuthorizeHandler::class)->setName('authorize');
 };

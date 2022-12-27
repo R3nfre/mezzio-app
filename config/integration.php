@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "clientId" => "a1a311b0-f161-489c-a570-122b8c00ceb0",
-    "clientSecret" => "qBXtDrqOq7iYoqI2mxldPfFK0M8ojtq8Jhjpg5oW75MhunbeSAvda24HBdSfSRYd",
-    "redirectUri" => "https://webhook.site/6025ea09-7715-428c-a2b0-2f4d0eefd485"
+    "clientId" => "bd82c2f0-870a-491d-ab01-5a1a53ffd2d4",
+    "clientSecret" => "cSRcm1Od82WLJdGevaqeWIACFZE6hgy2qeCsqQy0YdvKmJaxs0JWoW057PSlMgUb",
+    "redirectUri" => "https://13f1-173-233-147-68.eu.ngrok.io/authorize"
 ];

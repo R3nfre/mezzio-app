@@ -68,6 +68,7 @@ class ApiService
                         ->getAuthorizeUrl([
                             'state' => $state,
                             'mode' => 'post_message',
+                            'name' => $_SESSION['name']
                         ]);
                     header('Location: ' . $authorizationUrl);
                 }
@@ -103,11 +104,7 @@ class ApiService
             die($e->getMessage());
         }
 
-        return $this
-            ->apiClient
-            ->getOAuthClient()
-            ->getResourceOwner($accessToken)
-            ->getName();
+        return $_SESSION['name'];
     }
 
     /**
@@ -116,7 +113,7 @@ class ApiService
      * @param array $token
      * @return void
      */
-    private function saveToken(array $token)
+    private function saveToken(array $token): void
     {
         $tokens = file_exists(self::TOKENS_FILE)
             ? json_decode(file_get_contents(self::TOKENS_FILE), true)
@@ -127,11 +124,14 @@ class ApiService
 
     /**
      * Получение токена из файла по имени.
+     *
      * @param string $accountName
-     * @return array
+     * @return AccessToken
      */
     public function readToken(string $accountName): AccessToken
     {
-        return new AccessToken((json_decode(self::TOKENS_FILE, true))[$accountName]);
+        return new AccessToken(
+            json_decode(file_get_contents(self::TOKENS_FILE), true)[$accountName]
+        );
     }
 }

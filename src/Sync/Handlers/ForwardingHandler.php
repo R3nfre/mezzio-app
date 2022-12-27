@@ -10,13 +10,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
-class SumHandler implements RequestHandlerInterface
+class ForwardingHandler implements RequestHandlerInterface
 {
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return new JsonResponse([
-            'answer' => $request->getQueryParams()['num1'] + $request->getQueryParams()['num2']
+            'name' => $request->getQueryParams()['name']
         ]);
-
     }
 }

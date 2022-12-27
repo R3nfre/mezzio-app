@@ -14,18 +14,22 @@ use Sync\Kommo\ApiService;
 class AuthorizeHandler implements RequestHandlerInterface
 {
     /** @var string Файл хранения данных аккаунта. */
-    private const CONFIG_FILE = 'src/Sync/config.json';
+    private const CONFIG_FILE = './config/integration.php';
+
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $obj = include './config/integration.php';
+        $obj = include self::CONFIG_FILE;
         $apiService = new ApiService(
             $obj['clientId'],
             $obj['clientSecret'],
             $obj['redirectUri']
         );
-        $apiService->auth();
 
-        return new JsonResponse("");
+        $name = $apiService->auth();
+
+        return new JsonResponse([
+            'name' => $name
+        ]);
     }
 }
