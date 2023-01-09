@@ -14,6 +14,9 @@ class ApiService
     /** @var string Файл хранения токенов. */
     private const TOKENS_FILE = './tokens.json';
 
+    /** @var string Файл хранения данных аккаунта. */
+    private const CONFIG_FILE = './config/integration.php';
+
     /** @var AmoCRMApiClient AmoCRM клиент. */
     private AmoCRMApiClient $apiClient;
 
@@ -133,5 +136,17 @@ class ApiService
         return new AccessToken(
             json_decode(file_get_contents(self::TOKENS_FILE), true)[$accountName]
         );
+    }
+    public function readBaseDomain(string $accountName): string
+    {
+        return json_decode(file_get_contents(self::TOKENS_FILE), true)[$accountName]['base_domain'];
+
+    }
+    public function getApiClient(string $name) : AmoCRMApiClient
+    {
+        $this->apiClient
+            ->setAccessToken($this->readToken($name))
+            ->setAccountBaseDomain($this->readBaseDomain($name));
+        return $this->apiClient;
     }
 }

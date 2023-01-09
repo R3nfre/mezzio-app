@@ -43,6 +43,8 @@
     },
     "require": {
         "php": "^7.4 || ~8.0.0 || ~8.1.0",
+        "ext-curl": "*",
+        "ext-json": "*",
         "amocrm/amocrm-api-library": "^0.12.4",
         "composer/package-versions-deprecated": "^1.10.99",
         "illuminate/database": "^8.83",
@@ -54,9 +56,7 @@
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-fastroute": "^3.0.3",
         "mezzio/mezzio-helpers": "^5.7",
-        "ext-json": "*",
-        "ext-curl": "*",
-        "ext-http": "*"
+        "unisender/api-wrapper": "^1.6"
     },
     "require-dev": {
         "laminas/laminas-development-mode": "^3.3.0",

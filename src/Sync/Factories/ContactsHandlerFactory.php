@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Sync\Factories;
 
-use Sync\Handlers\ForwardingHandler;
+use Sync\Handlers\ContactsHandler;
 use Sync\Handlers\SumHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Sync\Handlers\AuthorizeHandler;
 
 
-class ForwardingHandlerFactory
+class ContactsHandlerFactory
 {
-    public function __invoke(ContainerInterface $container): ForwardingHandler
+
+    public function __invoke(ContainerInterface $container): ContactsHandler
     {
-        return new ForwardingHandler();
+        return new ContactsHandler();
     }
 }
