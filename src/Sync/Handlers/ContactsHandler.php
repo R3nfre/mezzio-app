@@ -13,6 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Sync\Kommo\ApiService;
 
+
 class ContactsHandler implements RequestHandlerInterface
 {
 
@@ -47,8 +48,6 @@ class ContactsHandler implements RequestHandlerInterface
                     $local['emails'][] = $email['value'];
                 }
                 unset($email);
-            } else {
-                $local['emails'] = null;
             }
             $answer[] = $local;
             unset($local);
