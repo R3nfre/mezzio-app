@@ -14,22 +14,10 @@ class GetUnisenderContactHandler implements RequestHandlerInterface
     {
         $uni = new UnisenderApi('6fs8brcr9ay16cf8xngo8k3pw4khnhbjr48kq99e');
 
-//        $result = $uni->importContacts([
-//               "field_names" => ["email", "Name"],
-//               "data" => [["egor@mail.ru", "egor"]]
-//            ]);
-//        $result = $uni->importContacts([
-//            "field_names" => ["email", "Name"],
-//            "data" => [["egor@mail.ru", "newEgor"]]
-//        ]);
-//        $result = $uni->importContacts([
-//            "field_names" => ["email", "delete"],
-//            "data" => [["egor@mail.ru", "1"]]
-//        ]);
         $result = $uni->getContact([
-                "email" => $request->getQueryParams()['email'],
-                "include_fields" => "1"
-            ]);
+            "email" => $request->getQueryParams()['email'],
+            "include_fields" => "1"
+        ]);
         return new JsonResponse(
             json_decode($result)
         );
