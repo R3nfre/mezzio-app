@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sync;
 
 use Sync\Factories\WebhookHandlerFactory;
-use Sync\Handlers\CreateUnisenderContactHandler;
+use Sync\Handlers\ImportContactsHandler;
 use Sync\Handlers\WebhookHandler;
 
 /**
@@ -42,7 +42,8 @@ class ConfigProvider
                 \Sync\Handlers\ContactsHandler::class => \Sync\Factories\ContactsHandlerFactory::class,
                 \Sync\Handlers\CreateUnisenderContactHandler::class => \Sync\Factories\CreateUnisenderContactHandlerFactory::class,
                 \Sync\Handlers\WebhookHandler::class=>\Sync\Factories\WebhookHandlerFactory::class,
-                \Sync\Handlers\GetUnisenderContactHandler::class=>\Sync\Factories\GetUnisenderContactHandlerFactory::class
+                \Sync\Handlers\GetUnisenderContactHandler::class=>\Sync\Factories\GetUnisenderContactHandlerFactory::class,
+                \Sync\Handlers\ImportContactsHandler::class =>  \Sync\Factories\ImportContactsHandlerFactory::class
             ],
         ];
     }
