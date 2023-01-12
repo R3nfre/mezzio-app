@@ -40,14 +40,17 @@ class ContactsHandler implements RequestHandlerInterface
         $contacts = $apiClient
             ->contacts()
             ->get();
+
         foreach ($contacts as $contact) {
             $customFields = $contact->getCustomFieldsValues();
             $local['name'] = $contact->toArray()['name'];
-            if ($customFields->getBy('fieldCode', 'EMAIL') !== null) {
+            if ($customFields !== null) {
                 foreach ($customFields->getBy('fieldCode', 'EMAIL')->getValues()->toArray() as $email) {
                     $local['emails'][] = $email['value'];
                 }
                 unset($email);
+            } else {
+                $local['emails'] = null;
             }
             $answer[] = $local;
             unset($local);
