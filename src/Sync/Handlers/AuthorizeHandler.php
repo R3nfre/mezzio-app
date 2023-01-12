@@ -19,6 +19,7 @@ class AuthorizeHandler implements RequestHandlerInterface
     private const CONFIG_FILE = './config/integration.php';
 
 
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $obj = include self::CONFIG_FILE;
@@ -29,9 +30,17 @@ class AuthorizeHandler implements RequestHandlerInterface
         );
 
         $name = $apiService->auth();
-
+//        $apiContacts = $apiService->getApiClient();
+//        try {
+//            $apiContacts->contacts();
+//        }
+//        catch(AmoCRMMissedTokenException $e) {
+//            return new JsonResponse([
+//                'error' => 'AmoCRMMissedTokenException'
+//            ]);
+//        }
         return new JsonResponse([
-            'name' => $name
+           'name' => $name
         ]);
     }
 }

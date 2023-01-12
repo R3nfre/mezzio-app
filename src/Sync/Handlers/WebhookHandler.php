@@ -12,6 +12,7 @@ class WebhookHandler implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        file_put_contents('./config.json', json_encode($request->getParsedBody(), JSON_PRETTY_PRINT));
         return new JsonResponse($request);
     }
 }
