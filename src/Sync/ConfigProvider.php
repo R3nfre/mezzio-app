@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Sync;
 
+use Sync\Factories\WebhookHandlerFactory;
+use Sync\Handlers\CreateUnisenderContactHandler;
+use Sync\Handlers\WebhookHandler;
+
 /**
  * The configuration provider for the App module
  *
@@ -36,6 +40,9 @@ class ConfigProvider
                 \Sync\Handlers\SumHandler::class => \Sync\Factories\SumHandlerFactory::class,
                 \Sync\Handlers\AuthorizeHandler::class => \Sync\Factories\AuthorizeHandlerFactory::class,
                 \Sync\Handlers\ContactsHandler::class => \Sync\Factories\ContactsHandlerFactory::class,
+                \Sync\Handlers\CreateUnisenderContactHandler::class => \Sync\Factories\CreateUnisenderContactHandlerFactory::class,
+                \Sync\Handlers\WebhookHandler::class=>\Sync\Factories\WebhookHandlerFactory::class,
+                \Sync\Handlers\GetUnisenderContactHandler::class=>\Sync\Factories\GetUnisenderContactHandlerFactory::class
             ],
         ];
     }

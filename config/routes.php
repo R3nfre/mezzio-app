@@ -41,4 +41,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/sum', Sync\Handlers\SumHandler::class, 'sum');
     $app->get('/contacts', Sync\Handlers\ContactsHandler::class, 'contacts');
     $app->route('/authorize', Sync\Handlers\AuthorizeHandler::class)->setName('authorize');
+    $app->get('/createUnisenderContact', Sync\Handlers\CreateUnisenderContactHandler::class, 'createUnisenderContact');
+    $app->get('/getUnisenderContact', Sync\Handlers\GetUnisenderContactHandler::class, 'getUnisenderContact');
+    $app->route('/webhook', Sync\Handlers\WebhookHandler::class)->setName('webhook');
 };

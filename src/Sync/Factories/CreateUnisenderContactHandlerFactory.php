@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Sync\Factories;
 
-use Sync\Handlers\WebhookHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Sync\Handlers\CreateUnisenderContactHandler;
+use Sync\Handlers\WebhookHandler;
 
-
-class SumHandlerFactory
+class CreateUnisenderContactHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
-        return new WebhookHandler();
+        return new CreateUnisenderContactHandler();
     }
 }

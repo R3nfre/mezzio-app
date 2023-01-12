@@ -1,15 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Sync\Factories;
 
-use Sync\Handlers\WebhookHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Sync\Handlers\WebhookHandler;
 
-
-class SumHandlerFactory
+class WebhookHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
