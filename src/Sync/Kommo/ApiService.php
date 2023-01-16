@@ -36,6 +36,14 @@ class ApiService
 
         if (isset($_GET['name'])) {
             $_SESSION['name'] = $_GET['name'];
+            $dbConnect = new DBConnection();
+            $dbConnect->connect();
+            $account = new Account();
+            if($answer = $account->query()
+                ->where('user_name', '=', $_GET['name'])
+                ->get()[0] != null){
+                return $_SESSION['name'];
+            }
         }
 
         if (isset($_GET['referer'])) {
