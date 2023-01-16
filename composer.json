@@ -47,6 +47,7 @@
         "ext-json": "*",
         "amocrm/amocrm-api-library": "^0.12.4",
         "composer/package-versions-deprecated": "^1.10.99",
+        "davedevelopment/phpmig": "^1.7",
         "illuminate/database": "^8.83",
         "laminas/laminas-component-installer": "^2.6",
         "laminas/laminas-config-aggregator": "^1.6",
@@ -56,7 +57,9 @@
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-fastroute": "^3.0.3",
         "mezzio/mezzio-helpers": "^5.7",
-        "unisender/api-wrapper": "^1.6"
+        "pimple/pimple": "^3.5",
+        "unisender/api-wrapper": "^1.6",
+      "ext-pdo": "*"
     },
     "require-dev": {
         "laminas/laminas-development-mode": "^3.3.0",

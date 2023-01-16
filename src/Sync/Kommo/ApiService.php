@@ -3,16 +3,16 @@
 namespace Sync\Kommo;
 
 use AmoCRM\Client\AmoCRMApiClient;
-use League\OAuth2\Client\Token\AccessToken;
 use Exception;
+use League\OAuth2\Client\Token\AccessToken;
+use Sync\Models\Account;
+use Sync\DBConnection;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class ApiService
 {
     /** @var string Базовый домен авторизации. */
     private const TARGET_DOMAIN = 'kommo.com';
-
-    /** @var string Файл хранения токенов. */
-    private const TOKENS_FILE = './tokens.json';
 
     /** @var string Файл хранения данных аккаунта. */
     private const CONFIG_FILE = './config/integration.php';
@@ -118,11 +118,20 @@ class ApiService
      */
     private function saveToken(array $token): void
     {
-        $tokens = file_exists(self::TOKENS_FILE)
-            ? json_decode(file_get_contents(self::TOKENS_FILE), true)
-            : [];
-        $tokens[$_SESSION['name']] = $token;
-        file_put_contents(self::TOKENS_FILE, json_encode($tokens, JSON_PRETTY_PRINT));
+        $dbConnect = new DBConnection();
+        $dbConnect->connect();
+        $account = new Account();
+        $account->query()
+            ->updateOrCreate(
+                [
+                    'user_name' => $_SESSION['name']
+                ],
+                [
+                    'user_name' => $_SESSION['name'],
+                    'account_data' => json_encode($token)
+                ]
+            )
+            ->save();
     }
 
     /**
@@ -133,16 +142,29 @@ class ApiService
      */
     public function readToken(string $accountName): AccessToken
     {
+        $dbConnect = new DBConnection();
+        $dbConnect->connect();
+        $account = new Account();
+        $answer = $account->query()
+            ->where('user_name', '=', $accountName)
+            ->get('account_data');
         return new AccessToken(
-            json_decode(file_get_contents(self::TOKENS_FILE), true)[$accountName]
+            json_decode($answer[0]['account_data'], true)
         );
     }
+
     public function readBaseDomain(string $accountName): string
     {
-        return json_decode(file_get_contents(self::TOKENS_FILE), true)[$accountName]['base_domain'];
-
+        $dbConnect = new DBConnection();
+        $dbConnect->connect();
+        $account = new Account();
+        $answer = $account->query()
+            ->where('user_name', '=', $accountName)
+            ->get('account_data');
+        return json_decode($answer[0]['account_data'], true)['base_domain'];
     }
-    public function getApiClient(string $name) : AmoCRMApiClient
+
+    public function getApiClient(string $name): AmoCRMApiClient
     {
         $this->apiClient
             ->setAccessToken($this->readToken($name))
