@@ -26,6 +26,6 @@ class Account extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_name', 'account_data'];
+    protected $fillable = ['user_name', 'account_data', 'unisender_api_key'];
 
 }

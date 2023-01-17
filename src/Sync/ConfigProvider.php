@@ -42,7 +42,8 @@ class ConfigProvider
                 \Sync\Handlers\ContactsHandler::class => \Sync\Factories\ContactsHandlerFactory::class,
                 \Sync\Handlers\CreateUnisenderContactHandler::class => \Sync\Factories\CreateUnisenderContactHandlerFactory::class,
                 \Sync\Handlers\WebhookHandler::class=>\Sync\Factories\WebhookHandlerFactory::class,
-                \Sync\Handlers\GetUnisenderContactHandler::class=>\Sync\Factories\GetUnisenderContactHandlerFactory::class
+                \Sync\Handlers\GetUnisenderContactHandler::class=>\Sync\Factories\GetUnisenderContactHandlerFactory::class,
+                \Sync\Handlers\WidgetHandler::class=>\Sync\Factories\WidgetHandlerFactory::class,
             ],
         ];
     }

@@ -13,7 +13,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Sync\Kommo\ApiService;
 
-
 class ContactsHandler implements RequestHandlerInterface
 {
 
@@ -36,15 +35,13 @@ class ContactsHandler implements RequestHandlerInterface
         );
         $apiClient = $apiService->getApiClient($request->getQueryParams()['name']);
         $answer = [];
-
         $contacts = $apiClient
             ->contacts()
             ->get();
-
         foreach ($contacts as $contact) {
             $customFields = $contact->getCustomFieldsValues();
             $local['name'] = $contact->toArray()['name'];
-            if ($customFields !== null) {
+            if ($customFields != null) {
                 foreach ($customFields->getBy('fieldCode', 'EMAIL')->getValues()->toArray() as $email) {
                     $local['emails'][] = $email['value'];
                 }
@@ -56,7 +53,6 @@ class ContactsHandler implements RequestHandlerInterface
             unset($local);
         }
         unset($contact);
-
 
         return new JsonResponse($answer);
     }

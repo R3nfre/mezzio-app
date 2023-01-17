@@ -45,4 +45,5 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/getUnisenderContact', Sync\Handlers\GetUnisenderContactHandler::class, 'getUnisenderContact');
     $app->route('/webhook', Sync\Handlers\WebhookHandler::class)->setName('webhook');
     $app->get('/importContacts', Sync\Handlers\ImportContactsHandler::class, 'importContacts');
+    $app->route('/widget', Sync\Handlers\WidgetHandler::class)->setName('widget');
 };
