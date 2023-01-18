@@ -9,6 +9,10 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Sync\DBConnection;
+use Sync\Models\Contact;
+use Sync\Models\Account;
+use Sync\Models\ContactNameEmail;
 use Sync\Kommo\ApiService;
 use Unisender\ApiWrapper\UnisenderApi;
 
@@ -17,9 +21,6 @@ class ImportContactsHandler implements RequestHandlerInterface
 {
     /** @var string Файл хранения данных аккаунта. */
     private const CONFIG_FILE = './config/integration.php';
-
-    /** @var string Файл хранения данных аккаунта. */
-    private const UNI_CONFIG_FILE = './config/uni.php';
 
     /**
      * Получение контактов AmoCRM.
@@ -46,6 +47,7 @@ class ImportContactsHandler implements RequestHandlerInterface
         foreach ($contacts as $contact) {
             $customFields = $contact->getCustomFieldsValues();
             $local['name'] = $contact->toArray()['name'];
+            $local['contactId'] = $contact->getId();
             if ($customFields !== null) {
                 foreach ($customFields->getBy('fieldCode', 'EMAIL')->getValues()->toArray() as $email) {
                     if ($email['enum_code'] == 'WORK') {
@@ -68,10 +70,13 @@ class ImportContactsHandler implements RequestHandlerInterface
      * @throws AmoCRMoAuthApiException
      * @throws AmoCRMMissedTokenException
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    private function importContacts(ServerRequestInterface $request): ResponseInterface
     {
-        $obj = include self::UNI_CONFIG_FILE;
-        $uni = new UnisenderApi($obj['apiKey']);
+        $dbConnect = new DBConnection();
+        $dbConnect->connect();
+        $uni = new UnisenderApi(
+            Account::where('user_name', $request->getQueryParams()['name'])->first()['unisender_api_key']
+        );
         $contacts = $this->getAmoCRMContacts($request->getQueryParams()['name']);
         $uniContacts = [];
         foreach ($contacts as $contact) {
@@ -85,7 +90,29 @@ class ImportContactsHandler implements RequestHandlerInterface
                 }
             }
         }
+        $dbConnect = new DBConnection();
+        $dbConnect->connect();
 
+        foreach ($contacts as $contact) {
+            if ($contact['emails'] != null) {
+                foreach ($contact['emails'] as $email) {
+                    ContactNameEmail::create([
+                        'email' => $email,
+                        'contact_name' => $contact['name'],
+                        'contact_id' => $contact['contactId']
+                    ]);
+                }
+            }
+        }
+
+        $users = ContactNameEmail::all();
+        foreach ($users as $user) {
+            Contact::updateOrCreate([
+                'fk_contact_name_email' => $user['pk_id']
+            ], [
+                'fk_account_id' => Account::where('user_name', $request->getQueryParams()['name'])->first()['pk_id']
+            ]);
+        }
         $result = $uni->importContacts([
             "field_names" => ["email", "Name"],
             "data" => $uniContacts
@@ -94,5 +121,15 @@ class ImportContactsHandler implements RequestHandlerInterface
         return new JsonResponse(
             json_decode($result)
         );
+    }
+
+    /**
+     * @throws AmoCRMoAuthApiException
+     * @throws AmoCRMApiException
+     * @throws AmoCRMMissedTokenException
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->importContacts($request);
     }
 }
