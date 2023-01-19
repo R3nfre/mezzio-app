@@ -3,6 +3,7 @@
 namespace Sync\Kommo;
 
 use AmoCRM\Client\AmoCRMApiClient;
+use AmoCRM\Exceptions\AmoCRMMissedTokenException;
 use Exception;
 use League\OAuth2\Client\Token\AccessToken;
 use Sync\Models\Account;
@@ -39,7 +40,7 @@ class ApiService
             $dbConnect = new DBConnection();
             $dbConnect->connect();
             $account = new Account();
-            if($answer = $account->query()
+            if($account->query()
                 ->where('user_name', '=', $_GET['name'])
                 ->get()[0] != null){
                 return $_SESSION['name'];
@@ -110,6 +111,7 @@ class ApiService
                     'expires' => $accessToken->getExpires(),
                     'base_domain' => $this->apiClient->getAccountBaseDomain(),
                 ]);
+                $this->setWebhook($_SESSION['name']);
             }
         } catch (Exception $e) {
             die($e->getMessage());
@@ -179,4 +181,30 @@ class ApiService
             ->setAccountBaseDomain($this->readBaseDomain($name));
         return $this->apiClient;
     }
+
+    /**
+     * Сохранение токена авторизации по имени аккаунта.
+     *
+     * @param array $token
+     * @return void
+     * @throws AmoCRMMissedTokenException
+     */
+    private function setWebhook(string $name): void
+    {
+        $this->apiClient
+            ->setAccessToken($this->readToken($name))
+            ->setAccountBaseDomain($this->readBaseDomain($name));
+        $webHookModel = (new \AmoCRM\Models\WebhookModel())
+            ->setSettings([
+                'add_contact',
+                'update_contact',
+                'delete_contact'
+            ])
+            ->setDestination('https://1249-173-233-147-68.eu.ngrok.io/webhook?name=' . $name);
+        $this->apiClient
+            ->webhooks()
+            ->subscribe($webHookModel)
+            ->toArray();
+    }
 }
+

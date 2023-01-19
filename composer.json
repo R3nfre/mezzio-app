@@ -45,6 +45,7 @@
         "php": "^7.4 || ~8.0.0 || ~8.1.0",
         "ext-curl": "*",
         "ext-json": "*",
+        "ext-pdo": "*",
         "amocrm/amocrm-api-library": "^0.12.4",
         "composer/package-versions-deprecated": "^1.10.99",
         "davedevelopment/phpmig": "^1.7",
@@ -57,16 +58,17 @@
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-fastroute": "^3.0.3",
         "mezzio/mezzio-helpers": "^5.7",
+        "pda/pheanstalk": "^4.0",
         "pimple/pimple": "^3.5",
-        "unisender/api-wrapper": "^1.6",
-      "ext-pdo": "*"
+        "unisender/api-wrapper": "^1.6"
     },
     "require-dev": {
+        "filp/whoops": "^2.7.1",
+        "laminas/laminas-cli": "^1.5",
         "laminas/laminas-development-mode": "^3.3.0",
         "mezzio/mezzio-tooling": "^2.1",
         "phpunit/phpunit": "^9.5.11",
-        "roave/security-advisories": "dev-master",
-        "filp/whoops": "^2.7.1"
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-4": {

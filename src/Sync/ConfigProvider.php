@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sync;
 
+
 use Sync\Factories\WebhookHandlerFactory;
 use Sync\Handlers\CreateUnisenderContactHandler;
 use Sync\Handlers\WebhookHandler;
@@ -25,6 +26,12 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
+            'laminas-cli' => [
+                'commands' => [
+                    'Sync:how-time' => \Sync\Command\TimeCommand::class,
+                    'Sync:worker' => \Sync\Command\WorkerCommand::class,
+                ]
+            ],
         ];
     }
 
@@ -44,6 +51,7 @@ class ConfigProvider
                 \Sync\Handlers\WebhookHandler::class=>\Sync\Factories\WebhookHandlerFactory::class,
                 \Sync\Handlers\GetUnisenderContactHandler::class=>\Sync\Factories\GetUnisenderContactHandlerFactory::class,
                 \Sync\Handlers\WidgetHandler::class=>\Sync\Factories\WidgetHandlerFactory::class,
+                \Sync\Handlers\ProducerHandler::class=>\Sync\Factories\ProducerHandlerFactory::class,
             ],
         ];
     }
