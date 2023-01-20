@@ -30,6 +30,8 @@ class ConfigProvider
                 'commands' => [
                     'Sync:how-time' => \Sync\Command\TimeCommand::class,
                     'Sync:worker' => \Sync\Command\WorkerCommand::class,
+                    'Sync:update-command' => \Sync\Command\UpdateCommand::class,
+                    'Sync:update-worker' => \Sync\Command\UpdateWorkerCommand::class,
                 ]
             ],
         ];

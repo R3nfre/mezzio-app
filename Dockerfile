@@ -20,4 +20,17 @@ USER $CONTAINER_USER_ID
  
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
-CMD ["php-fpm"]
+
+RUN apk --update add --no-cache bash
+
+# Задаем файл cron
+COPY crontab /var/spool/cron/crontabs/root
+
+# Файл для параллельного запуска cron и fpm
+COPY entrypoint.bash /usr/sbin
+
+# Выдаем всем права на выполнение файла
+RUN chmod a+x /usr/sbin/entrypoint.bash
+
+# Выполняем файл
+ENTRYPOINT /usr/sbin/entrypoint.bash

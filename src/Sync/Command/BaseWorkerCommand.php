@@ -13,7 +13,6 @@ use Sync\Config\BeanstalkConfig;
 
 abstract class BaseWorkerCommand extends Command
 {
-
     protected Pheanstalk $connection;
 
     protected string $queue = 'default';

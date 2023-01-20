@@ -19,12 +19,10 @@ class ProducerHandler implements RequestHandlerInterface
     private const CONFIG_BEANSTALK = './config/autoload/beanstalk.global.php';
 
     private ContainerInterface $container;
-
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->container=$container;
     }
-
     private function createProducer(): array
     {
         $beanstalk = new BeanstalkConfig($this->container);

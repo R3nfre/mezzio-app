@@ -4,11 +4,15 @@ namespace Sync\Kommo;
 
 use AmoCRM\Client\AmoCRMApiClient;
 use AmoCRM\Exceptions\AmoCRMMissedTokenException;
+use AmoCRM\Exceptions\AmoCRMoAuthApiException;
 use Exception;
+use Laminas\Diactoros\Response\JsonResponse;
 use League\OAuth2\Client\Token\AccessToken;
 use Sync\Models\Account;
 use Sync\DBConnection;
 use Illuminate\Database\Capsule\Manager as Capsule;
+
+use function PHPUnit\Framework\returnArgument;
 
 class ApiService
 {
@@ -37,14 +41,14 @@ class ApiService
 
         if (isset($_GET['name'])) {
             $_SESSION['name'] = $_GET['name'];
-            $dbConnect = new DBConnection();
-            $dbConnect->connect();
-            $account = new Account();
-            if($account->query()
-                ->where('user_name', '=', $_GET['name'])
-                ->get()[0] != null){
-                return $_SESSION['name'];
-            }
+//            $dbConnect = new DBConnection();
+//            $dbConnect->connect();
+//            $account = new Account();
+//            if($account->query()
+//                ->where('user_name', '=', $_GET['name'])
+//                ->get()[0] != null){
+//                return $_SESSION['name'];
+//            }
         }
 
         if (isset($_GET['referer'])) {
@@ -205,6 +209,47 @@ class ApiService
             ->webhooks()
             ->subscribe($webHookModel)
             ->toArray();
+    }
+
+    /**
+     * ????
+     *
+     * @param int $hour
+     * @return int
+     * @throws AmoCRMoAuthApiException
+     * @throws Exception
+     */
+    public function refreshToken(int $hour): int
+    {
+        (new DBConnection())->connect();
+
+        $authUser = Account::where('user_name', 'artyom2')->first();
+
+        if (!$authUser) {
+            throw new Exception('User not found');
+        }
+
+        $apiClient = $this->getApiClient($authUser->user_name);
+        $authUserToken = new AccessToken(json_decode($authUser->account_data, true));
+        $newToken = $apiClient
+            ->getOAuthClient()
+            ->setBaseDomain($authUserToken->getValues()['base_domain'])
+            ->getAccessTokenByRefreshToken($authUserToken);
+
+        $totalUpdates = 0;
+        foreach (Account::toUpdate($hour) as $account) {
+            $account->update([
+                'account_data' => json_encode([
+                    'access_token' => $newToken->getToken(),
+                    'refresh_token' => $newToken->getRefreshToken(),
+                    'expires' => $newToken->getExpires(),
+                    'base_domain' => $authUserToken->getValues()['base_domain'],
+                ])
+            ]);
+            $totalUpdates++;
+        }
+
+        return $totalUpdates;
     }
 }
 
